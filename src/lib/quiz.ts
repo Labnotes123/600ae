@@ -8,36 +8,41 @@ export function getChapterQuestions(chapterId: number, progress: Record<number, 
     const pA = progress[a.id];
     const pB = progress[b.id];
 
+    // 0. Câu hỏi khó (có sao) lên trước tuyệt đối
+    const aStarred = pA?.isStarred ? 1 : 0;
+    const bStarred = pB?.isStarred ? 1 : 0;
+    if (aStarred !== bStarred) {
+      return bStarred - aStarred;
+    }
+
+    // Câu đã thuộc (mastered) xuống cuối cùng nếu không phải câu khó
     const aTimesAnswered = pA?.timesAnswered || 0;
     const bTimesAnswered = pB?.timesAnswered || 0;
+    
+    const aCorrectRate = aTimesAnswered > 0 ? (pA?.timesCorrect || 0) / aTimesAnswered : 0;
+    const bCorrectRate = bTimesAnswered > 0 ? (pB?.timesCorrect || 0) / bTimesAnswered : 0;
+    
+    const aMastered = aCorrectRate >= 0.9 && aTimesAnswered >= 1 ? 1 : 0;
+    const bMastered = bCorrectRate >= 0.9 && bTimesAnswered >= 1 ? 1 : 0;
+    
+    if (aMastered !== bMastered) {
+      return aMastered - bMastered; // Mastered goes to bottom
+    }
 
-    // 1. Chưa trả lời bao giờ lên trước
+    // 1. Chưa học lên trước
     if (aTimesAnswered === 0 && bTimesAnswered > 0) return -1;
     if (bTimesAnswered === 0 && aTimesAnswered > 0) return 1;
 
-    if (aTimesAnswered > 0 && bTimesAnswered > 0) {
-      const aCorrectRate = (pA?.timesCorrect || 0) / aTimesAnswered;
-      const bCorrectRate = (pB?.timesCorrect || 0) / bTimesAnswered;
+    // 2. Câu ít học lên trước
+    if (aTimesAnswered !== bTimesAnswered) {
+      return aTimesAnswered - bTimesAnswered;
+    }
 
-      // 4. Nếu số lần trả lời đúng là 90% thì được coi là đã thuộc làu (bỏ xuống cuối cùng)
-      const aMastered = aCorrectRate >= 0.9 && aTimesAnswered >= 1;
-      const bMastered = bCorrectRate >= 0.9 && bTimesAnswered >= 1;
-
-      if (!aMastered && bMastered) return -1;
-      if (aMastered && !bMastered) return 1;
-
-      // 3. Trả lời sai lên trước (sort by incorrect count descending)
-      const aIncorrect = pA?.timesIncorrect || 0;
-      const bIncorrect = pB?.timesIncorrect || 0;
-      
-      if (aIncorrect !== bIncorrect) {
-        return bIncorrect - aIncorrect;
-      }
-
-      // 2. Trả lời ít lên trước
-      if (aTimesAnswered !== bTimesAnswered) {
-        return aTimesAnswered - bTimesAnswered;
-      }
+    // 3. Câu trả lời sai nhiều lên trước
+    const aIncorrect = pA?.timesIncorrect || 0;
+    const bIncorrect = pB?.timesIncorrect || 0;
+    if (aIncorrect !== bIncorrect) {
+      return bIncorrect - aIncorrect;
     }
 
     return 0;
@@ -59,4 +64,10 @@ export function generateReviewQuiz(progress: Record<number, UserProgress>): (Que
   });
 
   return reviewQuestions.slice(0, 10); // return up to 10 worst mistakes
+}
+
+export function getStarredQuestions(progress: Record<number, UserProgress>): Question[] {
+  const allQs = mockQuestions;
+  const starred = Object.values(progress).filter(p => p.isStarred).map(p => p.questionId);
+  return allQs.filter(q => starred.includes(q.id));
 }

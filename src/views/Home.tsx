@@ -1,20 +1,22 @@
 import React from 'react';
 import { useApp } from '../store/AppContext';
 import { CHAPTERS } from '../data/questions';
-import { BookOpen, Skull, PlayCircle, Library } from 'lucide-react';
+import { BookOpen, Skull, PlayCircle, Library, Star, ListOrdered, Shuffle } from 'lucide-react';
 import { Mascot } from '../components/Mascot';
 
 interface HomeProps {
   onStartLearn: (chapterId?: number, shuffle?: boolean) => void;
   onStartReview: () => void;
+  onStartStarred: () => void;
 }
 
-export function Home({ onStartLearn, onStartReview }: HomeProps) {
+export function Home({ onStartLearn, onStartReview, onStartStarred }: HomeProps) {
   const { progress, stats } = useApp();
 
   const totalQuestions = Object.keys(progress).length;
   const masteredCount = Object.values(progress).filter((p: any) => p.status === 'mastered').length;
   const mistakeCount = Object.values(progress).filter((p: any) => p.mistakeCount > 0).length;
+  const starredCount = Object.values(progress).filter((p: any) => p.isStarred).length;
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-8 h-full flex flex-col">
@@ -64,15 +66,17 @@ export function Home({ onStartLearn, onStartReview }: HomeProps) {
                 <div className="flex gap-2 mt-auto relative z-10 w-full">
                   <button 
                     onClick={() => onStartLearn(chap.id, false)}
-                    className="flex-1 bg-indigo-500/30 hover:bg-indigo-500/60 transition-colors text-[11px] font-bold py-1.5 rounded text-indigo-100 border border-indigo-500/30"
+                    title="Học tuần tự"
+                    className="flex-1 bg-indigo-500/30 hover:bg-indigo-500/60 transition-colors py-2 rounded text-indigo-100 border border-indigo-500/30 flex items-center justify-center group"
                   >
-                    Tuần tự
+                    <ListOrdered className="w-4 h-4 group-hover:scale-110 transition-transform" />
                   </button>
                   <button 
                     onClick={() => onStartLearn(chap.id, true)}
-                    className="flex-1 bg-purple-500/30 hover:bg-purple-500/60 transition-colors text-[11px] font-bold py-1.5 rounded text-purple-100 border border-purple-500/30 flex items-center justify-center gap-1"
+                    title="Học ngẫu nhiên"
+                    className="flex-1 bg-purple-500/30 hover:bg-purple-500/60 transition-colors py-2 rounded text-purple-100 border border-purple-500/30 flex items-center justify-center group"
                   >
-                    Ngẫu nhiên
+                    <Shuffle className="w-4 h-4 group-hover:scale-110 transition-transform" />
                   </button>
                 </div>
               </div>
@@ -80,24 +84,46 @@ export function Home({ onStartLearn, onStartReview }: HomeProps) {
           </div>
         </div>
 
-        {/* Review Mode (Spaced Repetition) */}
-        <div className="bg-orange-500/10 backdrop-blur-xl p-8 rounded-[40px] text-white flex flex-col relative overflow-hidden border border-orange-500/20">
-          <div className="absolute top-0 right-0 p-8 opacity-20">
-            <Skull className="w-32 h-32 text-orange-500" />
+        <div className="flex flex-col gap-6">
+          {/* Review Mode (Spaced Repetition) */}
+          <div className="bg-orange-500/10 backdrop-blur-xl p-8 rounded-[40px] text-white flex flex-col relative overflow-hidden border border-orange-500/20 flex-1">
+            <div className="absolute top-0 right-0 p-8 opacity-20">
+              <Skull className="w-32 h-32 text-orange-500" />
+            </div>
+            <h2 className="text-3xl font-bold mb-2 z-10 text-orange-400">Trại Cải Tạo</h2>
+            <p className="text-orange-200/60 mb-6 z-10 flex-1">
+              Thuật toán sẽ nhắc lại những câu bạn hay sai. Xóa nợ ngay!
+            </p>
+            
+            <button 
+              onClick={onStartReview}
+              disabled={mistakeCount === 0}
+              className="z-10 bg-orange-500 text-white w-full py-4 rounded-2xl font-bold text-lg uppercase tracking-wider transition-all flex items-center justify-center gap-2 hover:bg-orange-600 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-orange-500/20 active:translate-y-1"
+            >
+              <PlayCircle className="w-6 h-6" />
+              {mistakeCount === 0 ? "Không có nợ xấu" : "Vào Trại Ngay"}
+            </button>
           </div>
-          <h2 className="text-3xl font-bold mb-2 z-10 text-orange-400">Trại Cải Tạo</h2>
-          <p className="text-orange-200/60 mb-6 z-10 flex-1">
-            Thuật toán "Nhây" sẽ nhắc lại những câu bạn hay sai. Sai càng nhiều, gặp càng nhiều. Xóa nợ ngay!
-          </p>
-          
-          <button 
-            onClick={onStartReview}
-            disabled={mistakeCount === 0}
-            className="z-10 bg-orange-500 text-white w-full py-4 rounded-2xl font-bold text-lg uppercase tracking-wider transition-all flex items-center justify-center gap-2 hover:bg-orange-600 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-orange-500/20 active:translate-y-1"
-          >
-            <PlayCircle className="w-6 h-6" />
-            {mistakeCount === 0 ? "Không có nợ xấu" : "Vào Trại Ngay"}
-          </button>
+
+          {/* Starred Mode */}
+          <div className="bg-yellow-500/10 backdrop-blur-xl p-8 rounded-[40px] text-white flex flex-col relative overflow-hidden border border-yellow-500/20 flex-1">
+            <div className="absolute top-0 right-0 p-8 opacity-20">
+              <Star className="w-32 h-32 text-yellow-500" />
+            </div>
+            <h2 className="text-3xl font-bold mb-2 z-10 text-yellow-400">Câu Hỏi Khó</h2>
+            <p className="text-yellow-200/60 mb-6 z-10 flex-1">
+              Ôn lại phần câu hỏi do chính bạn đánh dấu sao.
+            </p>
+            
+            <button 
+              onClick={onStartStarred}
+              disabled={starredCount === 0}
+              className="z-10 bg-yellow-500 text-slate-900 w-full py-4 rounded-2xl font-bold text-lg uppercase tracking-wider transition-all flex items-center justify-center gap-2 hover:bg-yellow-400 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-yellow-500/20 active:translate-y-1"
+            >
+              <Star className="w-6 h-6" />
+              {starredCount === 0 ? "Chưa có sao" : "Luyện Sao Ngay"}
+            </button>
+          </div>
         </div>
       </div>
     </div>

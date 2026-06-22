@@ -7,14 +7,15 @@ import React, { useState } from 'react';
 import { Home } from './views/Home';
 import { Header } from './components/Header';
 import { QuestionView } from './components/QuestionView';
-import { getChapterQuestions, generateReviewQuiz } from './lib/quiz';
+import { getChapterQuestions, generateReviewQuiz, getStarredQuestions } from './lib/quiz';
 import { useApp } from './store/AppContext';
 import { Question } from './types';
 import { XCircle, ArrowLeft } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
+import { cn } from './lib/utils';
 
 function AppContent() {
-  const [currentView, setCurrentView] = useState<'home' | 'learn' | 'review'>('home');
+  const [currentView, setCurrentView] = useState<'home' | 'learn' | 'review' | 'starred'>('home');
   const [activeQuestions, setActiveQuestions] = useState<(Question & { mistake_count?: number })[]>([]);
   const { progress } = useApp();
 
@@ -34,10 +35,21 @@ function AppContent() {
   const handleStartReview = () => {
     const questions = generateReviewQuiz(progress);
     if (questions.length === 0) {
+      alert("Bạn chưa có câu nào làm sai nhiều để ôn tập!");
       return;
     }
     setActiveQuestions(questions);
     setCurrentView('review');
+  };
+
+  const handleStartStarred = () => {
+    const questions = getStarredQuestions(progress);
+    if (questions.length === 0) {
+      alert("Bạn chưa đánh dấu sao câu hỏi khó nào!");
+      return;
+    }
+    setActiveQuestions(questions);
+    setCurrentView('starred');
   };
 
   const handleComplete = () => {
@@ -71,7 +83,7 @@ function AppContent() {
         <AnimatePresence mode="wait">
           {currentView === 'home' && (
              <motion.div key="home" initial={{opacity: 0, x: -20}} animate={{opacity: 1, x: 0}} exit={{opacity: 0, x: 20}} className="flex-1 h-full max-h-full overflow-y-auto">
-                <Home onStartLearn={handleStartLearn} onStartReview={handleStartReview} />
+                <Home onStartLearn={handleStartLearn} onStartReview={handleStartReview} onStartStarred={handleStartStarred} />
              </motion.div>
           )}
 
@@ -84,10 +96,10 @@ function AppContent() {
              </motion.div>
           )}
 
-          {currentView === 'review' && (
-             <motion.div key="review" initial={{opacity: 0, scale: 0.95}} animate={{opacity: 1, scale: 1}} exit={{opacity: 0, scale: 1.05}} className="flex-1 h-full max-h-full overflow-y-auto w-full bg-orange-500/10">
+          {(currentView === 'review' || currentView === 'starred') && (
+             <motion.div key={currentView} initial={{opacity: 0, scale: 0.95}} animate={{opacity: 1, scale: 1}} exit={{opacity: 0, scale: 1.05}} className={cn("flex-1 h-full max-h-full overflow-y-auto w-full", currentView === 'starred' ? "bg-yellow-500/10" : "bg-orange-500/10")}>
                <div className="sm:hidden p-4 pb-0 flex justify-end">
-                 <button onClick={() => setCurrentView('home')} className="bg-white/10 backdrop-blur-md p-2 rounded-full shadow-lg border border-white/10 text-orange-400"><XCircle className="w-6 h-6" /></button>
+                 <button onClick={() => setCurrentView('home')} className={cn("bg-white/10 backdrop-blur-md p-2 rounded-full shadow-lg border text-orange-400", currentView === 'starred' ? "border-yellow-500/20 text-yellow-400" : "border-white/10")}><XCircle className="w-6 h-6" /></button>
                </div>
                <QuestionView questions={activeQuestions} onComplete={handleComplete} isReviewMode={true} />
              </motion.div>

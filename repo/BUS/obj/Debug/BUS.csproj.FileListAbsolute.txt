@@ -1,0 +1,12 @@
+D:\PRN292\Project\Project_PRN292\BUS\obj\Debug\BUS.Properties.Resources.resources
+D:\PRN292\Project\Project_PRN292\BUS\obj\Debug\BUS.csproj.GenerateResource.cache
+D:\PRN292\Project\Project_PRN292\BUS\obj\Debug\BUS.csproj.CoreCompileInputs.cache
+D:\PRN292\Project\Project_PRN292\BUS\bin\Debug\BUS.exe
+D:\PRN292\Project\Project_PRN292\BUS\bin\Debug\BUS.pdb
+D:\PRN292\Project\Project_PRN292\BUS\bin\Debug\DAO.exe
+D:\PRN292\Project\Project_PRN292\BUS\bin\Debug\DAO.pdb
+D:\PRN292\Project\Project_PRN292\BUS\obj\Debug\BUS.csproj.AssemblyReference.cache
+D:\PRN292\Project\Project_PRN292\BUS\obj\Debug\BUS.csproj.CopyComplete
+D:\PRN292\Project\Project_PRN292\BUS\obj\Debug\BUS.exe
+D:\PRN292\Project\Project_PRN292\BUS\obj\Debug\BUS.pdb
+D:\PRN292\Project\Project_PRN292\BUS\bin\Debug\DAO.exe.config

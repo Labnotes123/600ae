@@ -7,6 +7,7 @@ interface AppContextType {
   appealedAnswers: Record<number, number>;
   answerQuestion: (questionId: number, isCorrect: boolean, isFatal: boolean, timeSpent?: number) => void;
   appealAnswer: (questionId: number, correctedIndex: number) => void;
+  toggleStar: (questionId: number) => void;
   resetProgress: () => void;
   spendHeart: () => boolean;
   gainHeart: () => void;
@@ -100,6 +101,19 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     });
   };
 
+  const toggleStar = (questionId: number) => {
+    setProgress(prev => {
+      const current = prev[questionId] || { questionId, status: 'new', mistakeCount: 0 };
+      return {
+        ...prev,
+        [questionId]: {
+          ...current,
+          isStarred: !current.isStarred
+        }
+      };
+    });
+  };
+
   const answerQuestion = (questionId: number, isCorrect: boolean, isFatal: boolean, timeSpent: number = 0) => {
     setProgress(prev => {
       const current = prev[questionId] || { 
@@ -168,7 +182,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   };
 
   return (
-    <AppContext.Provider value={{ progress, stats, appealedAnswers, answerQuestion, appealAnswer, resetProgress, spendHeart, gainHeart }}>
+    <AppContext.Provider value={{ progress, stats, appealedAnswers, answerQuestion, appealAnswer, toggleStar, resetProgress, spendHeart, gainHeart }}>
       {children}
     </AppContext.Provider>
   );

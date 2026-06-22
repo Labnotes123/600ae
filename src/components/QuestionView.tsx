@@ -3,7 +3,7 @@ import { Question } from '../types';
 import { useApp } from '../store/AppContext';
 import { Mascot } from './Mascot';
 import { motion, AnimatePresence } from 'motion/react';
-import { ArrowRight, AlertOctagon, Skull, Timer, Flag, Pause } from 'lucide-react';
+import { ArrowRight, AlertOctagon, Skull, Timer, Flag, Pause, Star } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { cn } from '../lib/utils';
 
@@ -34,12 +34,13 @@ export function QuestionView({ questions, onComplete, isReviewMode }: QuestionVi
   const [isAnswered, setIsAnswered] = useState(false);
   const [isAppealing, setIsAppealing] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
-  const { answerQuestion, spendHeart, stats, appealAnswer, appealedAnswers, progress } = useApp();
+  const { answerQuestion, spendHeart, stats, appealAnswer, appealedAnswers, progress, toggleStar } = useApp();
 
   const isPausedRef = useRef(isPaused);
   useEffect(() => { isPausedRef.current = isPaused; }, [isPaused]);
 
   const question = questions[currentIndex];
+  const isStarred = question ? progress[question.id]?.isStarred : false;
   
   const actualCorrectIndex = question ? (appealedAnswers[question.id] !== undefined ? appealedAnswers[question.id] : question.correctAnswerIndex) : 0;
   
@@ -297,6 +298,16 @@ export function QuestionView({ questions, onComplete, isReviewMode }: QuestionVi
             </span>
           </div>
           <div className="flex items-center gap-2">
+            <button 
+              onClick={() => toggleStar(question.id)}
+              className={cn(
+                "p-1.5 rounded-full transition-colors shrink-0",
+                isStarred ? "text-yellow-400 bg-yellow-400/10 hover:bg-yellow-400/20" : "text-slate-400 hover:text-yellow-400 hover:bg-white/10"
+              )}
+              title={isStarred ? "Bỏ đánh dấu sao" : "Đánh dấu câu hỏi khó"}
+            >
+              <Star className="w-4 h-4" fill={isStarred ? "currentColor" : "none"} />
+            </button>
             {(question.isFatal || showMistakeWarning) && (
               <>
                 {question.isFatal && <span className="bg-red-500/20 text-red-400 border border-red-500/30 px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1"><AlertOctagon className="w-3 h-3" /> ĐIỂM LIỆT</span>}

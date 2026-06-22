@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ordesignerObjectsDiagram dslVersion="1.0.0.0" absoluteBounds="0, 0, 11, 8.5" name="LinQ">
+  <DataContextMoniker Name="/LinQDataContext" />
+  <nestedChildShapes>
+    <classShape Id="7db3a56a-8002-406f-a0ba-573aaf7397f0" absoluteBounds="5, 1.75, 2, 1.1939925130208333">
+      <DataClassMoniker Name="/LinQDataContext/ImageCauHoi" />
+      <nestedChildShapes>
+        <elementListCompartment Id="97290673-db7f-4465-bc64-f63c433190f0" absoluteBounds="5.015, 2.21, 1.9700000000000002, 0.63399251302083326" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="56f18450-bb48-4883-aa9e-d48efc18b4dd" absoluteBounds="2, 1.375, 2, 1.7708968098958331">
+      <DataClassMoniker Name="/LinQDataContext/Question" />
+      <nestedChildShapes>
+        <elementListCompartment Id="700b9092-69f7-4ebd-a629-cfb100736854" absoluteBounds="2.015, 1.835, 1.9700000000000002, 1.2108968098958333" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <associationConnector edgePoints="[(5 : 2.34699625651042); (4 : 2.34699625651042)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+      <AssociationMoniker Name="/LinQDataContext/ImageCauHoi/ImageCauHoi_Question" />
+      <nodes>
+        <classShapeMoniker Id="7db3a56a-8002-406f-a0ba-573aaf7397f0" />
+        <classShapeMoniker Id="56f18450-bb48-4883-aa9e-d48efc18b4dd" />
+      </nodes>
+    </associationConnector>
+  </nestedChildShapes>
+</ordesignerObjectsDiagram>

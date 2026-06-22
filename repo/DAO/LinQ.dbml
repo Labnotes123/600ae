@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="Project_PRN292" Class="LinQDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="AppSettings" ConnectionString="Data Source=LAPTOP-POPERAEM\SQLEXPRESS;Initial Catalog=Project_PRN292;Integrated Security=True" SettingsObjectName="DAO.Properties.Settings" SettingsPropertyName="Project_PRN292ConnectionString" Provider="System.Data.SqlClient" />
+  <Table Name="dbo.ImageCauHoi" Member="ImageCauHois">
+    <Type Name="ImageCauHoi">
+      <Column Name="ImageID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Image" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Association Name="ImageCauHoi_Question" Member="Questions" ThisKey="ImageID" OtherKey="ImageID" Type="Question" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Question" Member="Questions">
+    <Type Name="Question">
+      <Column Name="QuestionID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="ImageID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="NumberAnser" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Answer" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Liet" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Association Name="ImageCauHoi_Question" Member="ImageCauHoi" ThisKey="ImageID" OtherKey="ImageID" Type="ImageCauHoi" IsForeignKey="true" />
+    </Type>
+  </Table>
+</Database>

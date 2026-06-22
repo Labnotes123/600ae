@@ -1,0 +1,9 @@
+D:\PRN292\Project\Project_PRN292\DAO\obj\Debug\DAO.csproj.AssemblyReference.cache
+D:\PRN292\Project\Project_PRN292\DAO\obj\Debug\DAO.Properties.Resources.resources
+D:\PRN292\Project\Project_PRN292\DAO\obj\Debug\DAO.csproj.GenerateResource.cache
+D:\PRN292\Project\Project_PRN292\DAO\obj\Debug\DAO.csproj.CoreCompileInputs.cache
+D:\PRN292\Project\Project_PRN292\DAO\bin\Debug\DAO.exe
+D:\PRN292\Project\Project_PRN292\DAO\bin\Debug\DAO.pdb
+D:\PRN292\Project\Project_PRN292\DAO\obj\Debug\DAO.exe
+D:\PRN292\Project\Project_PRN292\DAO\obj\Debug\DAO.pdb
+D:\PRN292\Project\Project_PRN292\DAO\bin\Debug\DAO.exe.config

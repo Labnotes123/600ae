@@ -18,6 +18,7 @@ export interface UserProgress {
   timesCorrect?: number;
   timesIncorrect?: number;
   totalTimeSpent?: number; // seconds
+  isStarred?: boolean; // Câu hỏi khó (đánh dấu sao)
 }
 
 export interface UserStats {
